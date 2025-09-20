@@ -22,9 +22,8 @@ wiki_wiki = wikipediaapi.Wikipedia(
 # ✅ OpenAI setup
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# ✅ Gemini setup
+# ✅ Gemini setup (updated for latest SDK)
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
 @app.route("/api/query", methods=["POST"])
 def api_query():
@@ -51,10 +50,13 @@ def api_query():
     except Exception as e:
         ai_summary = f"OpenAI error: {str(e)}"
 
-    # Step 3: Gemini
+    # Step 3: Gemini / Google Generative AI
     try:
-        gemini_response = gemini_model.generate_content(f"Provide detailed guidance about: {query}")
-        gemini_summary = gemini_response.text.strip() if gemini_response and gemini_response.text else "No response from Gemini."
+        gemini_response = genai.chat.create(
+            model="models/chat-bison-001",
+            messages=[{"author": "user", "content": f"Provide detailed guidance about: {query}"}]
+        )
+        gemini_summary = gemini_response.last.strip() if gemini_response and gemini_response.last else "No response from Gemini."
     except Exception as e:
         gemini_summary = f"Gemini error: {str(e)}"
 
