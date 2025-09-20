@@ -1,0 +1,9 @@
+Flask==2.3.3
+requests==2.32.3
+numpy==1.26.4
+pandas==2.1.4
+eland==8.18.2
+google-genai==1.33.0
+wikipedia-api==0.6.0
+gunicorn==21.2.0
+openai
